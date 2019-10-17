@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SwordsYeah.Entities;
+using System.IO;
 
 namespace SwordsYeah
 {
@@ -11,6 +13,18 @@ namespace SwordsYeah
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        public static Texture2D pallete;
+        public static Rectangle red = new Rectangle(0, 0, 1, 1),
+            blue = new Rectangle(1, 0, 1, 1),
+            green= new Rectangle(2, 0, 1, 1),
+            orange = new Rectangle(3, 0, 1, 1),
+            pink = new Rectangle(4, 0, 1, 1),
+            yellow = new Rectangle(5, 0, 1, 1),
+            cyan = new Rectangle(6, 0, 1, 1),
+            magenta = new Rectangle(7, 0, 1, 1),
+            black = new Rectangle(8, 0, 1, 1),
+            white = new Rectangle(9, 0, 1, 1);
+        Player1 player1 = new Player1(50, 50);
 
         public Game1()
         {
@@ -40,6 +54,18 @@ namespace SwordsYeah
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            //Jesse - I know there's a better way to load resources using the actual
+            //        resource loader that Monogame has, but idk how to use it yet
+            //        Also, pallete is just a 1 pixel tall line of different colored
+            //        colored pixels that I like to use for debugging.
+            //Jesse - Oh shoot. This isn't working when I try to do it here like it does
+            //        in my other project. I'll look into it if I have time late but if
+            //        either of you have time to figure out the content manager, I'd much appreciate it.
+            FileStream fstream = new FileStream("Content/pallete.png", FileMode.Open);
+            pallete = Texture2D.FromStream(GraphicsDevice, fstream);
+
+            fstream.Dispose();
+            
             // TODO: use this.Content to load your game content here
         }
 
@@ -74,9 +100,12 @@ namespace SwordsYeah
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
 
+            player1.Draw(spriteBatch);
             // TODO: Add your drawing code here
 
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
